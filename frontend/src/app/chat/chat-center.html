@@ -1,0 +1,37 @@
+<div class="card chat" style="flex:1">
+        <div class="chat-head">
+          <div class="ava">NAI</div>
+          <div class="t"><h2>Hội thoại tiếp nhận</h2><div class="s">Trợ lý tiếp nhận · Tiếng Việt</div></div>
+          <!-- <span class="pill">Qwen3:8B · Local</span> -->
+        </div>
+        <div class="msgs" #msgs>
+          <div class="stack">
+            @for (message of messages(); track message.id) {
+              @if (message.role === 'user') {
+                <div class="m u"><div class="meta">Bệnh nhân · {{ formatTime(message.created_at) }}</div><div class="b">{{ message.text }}</div></div>
+                @if (chips()[message.id]; as chip) {
+                  <div class="sys" [class.warn]="chip.warn">{{ chip.text }}</div>
+                }
+              } @else {
+                <div class="m"><div class="meta">Trợ lý tiếp nhận · {{ formatTime(message.created_at) }}</div><div class="b">{{ message.text }}</div></div>
+              }
+            }
+            @if (isSending()) {
+              <div class="m"><div class="meta">Trợ lý tiếp nhận</div>
+              <div class="b thinking">NAI đang phân tích, xin bạn hãy chờ trong giây lát <span class="dots">
+                <i></i><i></i><i></i></span>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+        <div class="composer">
+          <div class="inrow">
+            <input #input class="inp" type="text" placeholder="Nhập câu trả lời của bạn..." aria-label="Câu trả lời của bệnh nhân" [disabled]="isSending() || isEnded()" (keydown.enter)="onEnter($event, input)">
+            <button class="send" [disabled]="isSending() || isEnded()" (click)="send(input)">Gửi trả lời<svg class="ic" viewBox="0 0 24 24" style="stroke:#fff"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </div>
+          <div class="hint">Không nhập tên, mã bệnh nhân hoặc thông tin định danh thật.</div>
+        </div>
+      </div>
+
+

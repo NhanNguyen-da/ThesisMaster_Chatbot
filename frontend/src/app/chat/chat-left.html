@@ -1,0 +1,29 @@
+<div class="col col-left">
+        <div class="card" style="padding:14px 16px">
+          <div class="eyebrow" style="margin-bottom:2px">Phiên</div>
+          <div class="kv"><div class="lbl">Mã phiên</div><div class="val" style="font-size:16px">{{ sessionId() !== null ? '#' + sessionId() : '' }}</div></div>
+          <div class="kv"><div class="lbl">Lượt hội thoại</div><div class="val">{{ state().round }} / 6</div></div>
+          <div class="kv"><div class="lbl">Mức hoàn chỉnh dữ kiện</div><div class="val">{{ state().completeness_percent }}%</div><div class="bar" style="margin-top:6px"><i [style.width.%]="state().completeness_percent"></i></div></div>
+        </div>
+        <div class="card" style="padding:14px 16px;flex:1">
+          <div class="eyebrow" style="margin-bottom:10px">Luồng xử lý phiên</div>
+          <div class="vsteps">
+            <div class="step" [class.done]="currentStep() > 1" [class.cur]="currentStep() === 1" [class.wait]="currentStep() < 1"><div class="n">01 · INPUT</div><div class="s">Tiếng Việt tự do</div><div class="d">{{ receivedText() }}</div></div>
+            <div class="conn" [class.on]="currentStep() > 1" aria-hidden="true"></div>
+            <div class="step" [class.done]="currentStep() > 2" [class.cur]="currentStep() === 2" [class.wait]="currentStep() < 2"><div class="n">02 · LLM</div><div class="s">Trích xuất dữ kiện</div><div class="d">{{ extractionText() }}</div></div>
+            <div class="conn" [class.on]="currentStep() > 2" aria-hidden="true"></div>
+            <div class="step" [class.done]="currentStep() > 3" [class.cur]="currentStep() === 3" [class.wait]="currentStep() < 3"><div class="n">03 · RULE ENGINE</div><div class="s">Quyết định nhị phân</div><div class="d">{{ conclusionText() }}</div></div>
+            <div class="conn" [class.on]="currentStep() > 3" aria-hidden="true"></div>
+            <div class="step" [class.done]="currentStep() > 4" [class.cur]="currentStep() === 4" [class.wait]="currentStep() < 4">
+              <div class="n">04 · KẾT QUẢ</div><div class="s">Hướng xử trí</div><div class="d">{{ resultLabel() ? 'Đã có kết luận' : 'Chờ kết luận' }}</div>
+              <div class="rlabels">
+                @for (label of resultLabels; track label) {
+                  <span class="rlabel" [class.on]="label === resultLabel()">{{ label }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+

@@ -1,0 +1,67 @@
+<div class="col col-right">
+        <div class="rule">
+          <div class="eyebrow">Rule engine output</div>
+          <h3>{{ resultTitle() }}</h3>
+          <p>&nbsp;</p>
+        </div>
+        <div class="card" style="padding:6px 16px">
+          <div class="pending-label">{{ isEnded() ? 'Đã kết thúc' : 'Đang xử lý' }}</div>
+          <div class="conds">
+            @if (state().last_run; as run) {
+              @if (!run.valid) {
+                <div class="cond"><div class="tick alert">!</div><div><div class="ct">Input hợp lệ</div><div class="cs">Phản hồi của LLM không hợp lệ</div></div></div>
+              } @else if (run.off_topic) {
+                <div class="cond"><div class="tick alert">!</div><div><div class="ct">Input hợp lệ</div><div class="cs">Nội dung không liên quan đến sức khỏe</div></div></div>
+              } @else {
+                <div class="cond"><div class="tick"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div><div class="ct">Input hợp lệ</div><div class="cs">Nội dung liên quan đến sức khỏe</div></div></div>
+              }
+            } @else {
+              <div class="cond"><div class="tick wait">···</div><div><div class="ct">Input hợp lệ</div><div class="cs">Chờ câu trả lời đầu tiên</div></div></div>
+            }
+            @if (state().result.rule_id !== null) {
+              <div class="cond"><div class="tick alert">!</div><div><div class="ct">Kiểm tra red-flag</div><div class="cs">Khớp luật cấp cứu số {{ state().result.rule_id }}: {{ state().result.rule_name }}</div></div></div>
+            } @else if (state().round === 0) {
+              <div class="cond"><div class="tick wait">···</div><div><div class="ct">Kiểm tra red-flag</div><div class="cs">Chờ câu trả lời đầu tiên</div></div></div>
+            } @else {
+              <div class="cond"><div class="tick"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div><div class="ct">Kiểm tra red-flag</div><div class="cs">Chưa phát hiện dấu hiệu cảnh báo</div></div></div>
+            }
+            @if (state().filled_count === 6) {
+              <div class="cond"><div class="tick"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div><div class="ct">Đủ dữ kiện OPQRST</div><div class="cs">Đã đủ 6/6 trường</div></div></div>
+            } @else {
+              <div class="cond"><div class="tick wait">···</div><div><div class="ct">Đủ dữ kiện OPQRST</div><div class="cs">{{ state().filled_count }}/6 trường · Còn thiếu: {{ missingLabels() }}</div></div></div>
+            }
+          </div>
+        </div>
+        <div class="card panel" style="flex:1">
+          <div class="ph"><h2 style="font-size:15px">OPQRST đã trích xuất</h2><span class="cnt">{{ state().filled_count }}/6 trường</span></div>
+          <div class="fields">
+            @for (tile of tiles; track tile.key) {
+              @if (state().opqrst[tile.key]; as value) {
+                <div class="fld on"><div class="k">{{ tile.letter }}</div><div class="t"><div class="n">{{ tile.label }}</div><div class="v">{{ value }}</div></div></div>
+              } @else {
+                <div class="fld e"><div class="k">{{ tile.letter }}</div><div class="t"><div class="n">{{ tile.label }}</div><div class="v">Chưa thu thập</div></div></div>
+              }
+            }
+          </div>
+          <div>
+            <div class="eyebrow" style="margin-bottom:6px">Triệu chứng đã khớp</div>
+            @if (state().symptoms.length === 0) {
+              <div class="fld e" style="border:0;padding:0;background:none"><div class="t"><div class="v">Chưa có</div></div></div>
+            } @else {
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                @for (symptom of state().symptoms; track symptom.phrase) {
+                  <div class="sys" [class.warn]="symptom.standard_name === null">{{ symptomText(symptom) }}</div>
+                }
+              </div>
+            }
+          </div>
+          <div class="counts">
+            @if (state().result.rule_id !== null) {
+              <div class="count alert"><div class="l">Red-flag</div><div class="n">Luật {{ state().result.rule_id }}</div><div class="s">{{ state().result.rule_name }}</div></div>
+            } @else {
+              <div class="count"><div class="l">Red-flag</div><div class="n">Chưa có</div><div class="s">Không khớp luật cấp cứu</div></div>
+            }
+            <div class="count"><div class="l">Off-topic</div><div class="n">{{ state().off_topic_count }} / 3</div><div class="s">Đủ 3 lần sẽ chuyển nhân viên</div></div>
+          </div>
+        </div>
+      </div>
