@@ -3,7 +3,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-const API_URL = 'http://localhost:8000';
+// Allow overriding the backend URL via "?api=" (trycloudflare.com only).
+const apiFromLink = new URLSearchParams(window.location.search).get('api');
+const API_URL =
+  apiFromLink && /^https:\/\/[a-z0-9-]+\.trycloudflare\.com$/.test(apiFromLink)
+    ? apiFromLink
+    : 'http://localhost:8000';
 const PENDING_ID = -1;
 
 // The three possible final results: emergency, clinical visit, handover to staff.
