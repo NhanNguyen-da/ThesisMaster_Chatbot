@@ -4,7 +4,7 @@ FIELD_QUESTIONS = {
     "provocation_palliation": "Có điều gì làm triệu chứng nặng hơn hoặc đỡ hơn không, ví dụ nghỉ ngơi, vận động hay uống thuốc?",
     "quality": "Bạn cảm thấy triệu chứng như thế nào, ví dụ đau nhói, đau âm ỉ, nặng nề hay tức?",
     "region_radiation": "Triệu chứng ở vị trí nào và có lan sang chỗ khác không?",
-    "severity": "Mức độ khó chịu hiện tại là bao nhiêu trên thang điểm từ 0 đến 10?",
+    "severity": "Mức độ khó chịu hiện tại là bao nhiêu trên thang điểm từ 0 đến 10? 0 là không khó chịu, 5 là vừa phải, 10 là khó chịu nhất.",
     "time_course": "Từ lúc bắt đầu đến giờ, triệu chứng thay đổi thế nào: nặng dần, đỡ dần, liên tục hay từng cơn?",
 }
 
