@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Secrets and local config
+.env
+*.env
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node / Angular build
+node_modules/
+dist/
+.angular/
+
+# Working notes and agent files (not deployed)
+frontend/NAI/
+NAI/
+CLAUDE.md
+.claude/
+*.md
+!/README.md
+
+# Logs
+*.log
